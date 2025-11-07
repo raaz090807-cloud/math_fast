@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <title>Math Calc Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body{font-family:Segoe UI;background:#111;color:#eee;display:flex;justify-content:center;align-items:center;height:100vh;margin:0}
+    .card{background:#222;padding:30px 40px;border-radius:12px;box-shadow:0 0 20px rgba(0,200,255,.4);text-align:center;width:90%;max-width:400px}
+    h1{margin-top:0;color:#00e5ff}
+    #question{font-size:1.8rem;margin:20px 0}
+    input[type=number]{font-size:1.4rem;padding:10px;width:140px;border:none;border-radius:6px;text-align:center}
+    button{font-size:1.2rem;padding:10px 22px;margin:10px 5px;border:none;border-radius:6px;cursor:pointer;background:#00e5ff;color:#000;font-weight:bold}
+    button:hover{background:#00acc1}
+    #score{margin-top:15px;font-size:1.1rem}
+    #msg{margin-top:10px;height:24px;font-weight:bold}
+    .correct{color:#76ff03}.wrong{color:#ff5252}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>⚡ Math Calc Game</h1>
+    <div id="question">Loading…</div>
+    <input id="answer" type="number" placeholder="उत्तर">
+    <br>
+    <button onclick="check()">Submit</button>
+    <button onclick="next()">Skip / Next</button>
+    <div id="score">Score: 0 | Time: 0s</div>
+    <div id="msg"></div>
+  </div>
+
+  <script>
+    let a,b,op,correct,score=0,start=Date.now();
+    const ops=["+","-","*"];
+    const q=document.getElementById("question");
+    const ans=document.getElementById("answer");
+    const msg=document.getElementById("msg");
+    function rnd(n){return Math.floor(Math.random()*n)+1}
+    function next(){
+      a=rnd(20); b=rnd(20); op=ops[Math.floor(Math.random()*3)];
+      correct=op==="+"?a+b:op==="-"?a-b:a*b;
+      q.textContent=`${a} ${op} ${b} = ?`;
+      ans.value=""; ans.focus(); msg.textContent="";
+    }
+    function check(){
+      const u=Number(ans.value);
+      if(isNaN(u)){msg.textContent="कृपया संख्या डालें!";msg.className="wrong";return}
+      if(u===correct){score++;msg.textContent="✅ सही!";msg.className="correct";setTimeout(next,500)}
+      else{msg.textContent=`❌ ग़लत! सही उत्तर: ${correct}`;msg.className="wrong"}
+      document.getElementById("score").textContent=`Score: ${score} | Time: ${Math.floor((Date.now()-start)/1000)}s`;
+    }
+    ans.addEventListener("keyup",e=>{if(e.key==="Enter")check()});
+    setInterval(()=>document.getElementById("score").textContent=`Score: ${score} | Time: ${Math.floor((Date.now()-start)/1000)}s`,1000);
+    next();
+  </script>
+</body>
+</html>
